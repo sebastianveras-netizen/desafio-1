@@ -1,9 +1,13 @@
 #include <iostream>
 
 
-
+using namespace std;
 int main()
 {
-    std::cout << "HOLA MUNDO" << std::endl;
-    return 0;
+    int filas = 0 , columnas = 0;
+
+    cout << "ingrese la cantidad de filas : " << endl;
+    cin >>filas;
+
 }
+
