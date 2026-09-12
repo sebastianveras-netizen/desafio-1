@@ -36,11 +36,19 @@ int main()
 
 
     }
+// aqui inician las opciones
 
+    int opcion= true;
+    while (opcion=false) {
+        cout<<"elije una de las siguientes opciones"<<endl;
 
+         cout<<"1. ver tablero"<<endl<<"2. selecionar y eliminar casillas"<<endl<<"3. modificar tablero"<<endl<<"0. salir"<<endl;
+        cin>>opcion;
+         cout<<"la opcion elijida fue: "<<opcion<<endl;
 
-//ensayo
+  //iniciar con interacion de cadena
 
+    }
 
 
     return 0;
