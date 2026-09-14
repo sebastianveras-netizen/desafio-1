@@ -5,6 +5,12 @@
 using namespace std;
 
 
+<<<<<<< HEAD
+=======
+        }
+}
+
+>>>>>>> 5ce510a3ee520250e04c4f2e7545dd9bdda0af46
 int calcularbytesnecesarios (int filas , int columnas) {
     int totalbits = filas * columnas * 3;
     return (totalbits + 7) /8;
