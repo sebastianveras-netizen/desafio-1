@@ -4,5 +4,6 @@
 #include <iostream>
 
 int calcularbytesnecesarios (int filas , int columnas);
-unsigned char* guardarfichas ( unsigned char* memoria,int columnas, int fila,int columna, int valor);
+unsigned char* guardarficha ( unsigned char* memoria,int columnas, int fila,int columna, int valor);
+int leerficha( unsigned char* memoria,int columnas, int fila,int columna);
 #endif
