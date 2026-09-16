@@ -9,11 +9,7 @@ using namespace std;
 int main()
 {
     srand(time(0));
-<<<<<<< HEAD
-    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0, eliminacionesusuario=0;  //declaaramos las variables a utilizar
-=======
     int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0, eliminacionesusuario=0;
->>>>>>> 60d3378d0ceec035b72b9d4e8ed422c17f627c3a
 
 
 
@@ -43,17 +39,11 @@ int main()
         }
 
 
-<<<<<<< HEAD
-    }  
-//se recorre todas las celdas i-filas c-columnas
-
-=======
     }
->>>>>>> 60d3378d0ceec035b72b9d4e8ed422c17f627c3a
 
 // aqui inician las opciones
 
-    int opcion= -1;
+int opcion= -1;
     while (opcion!=0){
         cout<<"elije una de las siguientes opciones"<<endl;
 
@@ -66,20 +56,11 @@ int main()
 
 
          if (opcion ==1){
-<<<<<<< HEAD
-             memoria =imprimirtablerofichas(memoria,fila, columna);//llamamos esta funcion para traer los valores almacenados de las fichasaleatorias
-
-         }
-         else if(opcion ==2){
-             memoria =imprimirtablerobinario(memoria,fila,columna);/*cuando se ejecutamos esta opcion esta imprime la representacion directa
-                                                                       en bits o numeros binarios que almacenamos en memoria*/
-=======
              memoria =imprimirtablerofichas(memoria,fila, columna);
 
          }
          else if(opcion ==2){
              memoria =imprimirtablerobinario(memoria,fila,columna);
->>>>>>> 60d3378d0ceec035b72b9d4e8ed422c17f627c3a
          }
 
 
@@ -101,14 +82,10 @@ int main()
 
                          memoria= guardarficha(memoria, columna, seleccion_fila, seleccion_columna, 6);
                          eliminacionesusuario++;
-                         cout<<"se elimino la ficha";
+                         cout<<"se elimino la ficha" <<endl;
 
                      }else{
-<<<<<<< HEAD
-                         cout<<"no se encuentra la posicion"; //se activa cuando la selecion de fila como columnas no coinciden con el tablero
-=======
                          cout<<"no se encuentra la posicion";
->>>>>>> 60d3378d0ceec035b72b9d4e8ed422c17f627c3a
 
                      }
 
