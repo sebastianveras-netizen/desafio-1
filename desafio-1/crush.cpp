@@ -84,7 +84,7 @@ unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int col
 
     cout << "TABLERO" << endl;
     for (int f=0;f<filas; ++f) {
-            cout << "FILA"<< f << " " << endl;
+            cout << "FILA "<< f << " ";
     for (int c=0;c<columnas;++c){
             int valor = leerfichas(memoria,columnas,f,c);
             cout << obtenercaracter(valor) << " " ;
