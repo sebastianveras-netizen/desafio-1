@@ -150,9 +150,10 @@ unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int col
         int totalbytes = calcularbytesnecesarios(filas,columnas);/*ejecutamos la funcion calcularbytesnecesarios*/
         cout << "ram en binario memoria fisica" << endl;
         for (int b=0;b<totalbytes; ++b) {
-            cout << "byte"<< b << " : " << endl;
+            cout << "byte"<< b << " : ";/*imprime el byte donde esta guardado la cadena de bits */
             for (int bit = 7 ; bit >= 0; --bit ){
-                cout <<((memoria[b]>> bit) & 1);
+                cout <<((memoria[b]>> bit) & 1);/*accede a la cadena de bits que esta en la posicion de el byte
+                                                en la variable memoria*/
 
 
             }
