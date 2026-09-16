@@ -117,23 +117,27 @@ int leerfichas( unsigned char* memoria,int columnas, int fila,int columna) {
  }
 
 }
-char obtenercaracter(int valor){/**/
-    int codigo = valor & 7;
-    if(codigo <=5 ){
-    char caracter = 'A' + codigo;
-        return caracter;
+char obtenercaracter(int valor){
+    int codigo = valor & 7;/*toma los bits que estan en (valor) y les aplica mascara 7 */
+    if(codigo <=5 ){/*si el resultante en bits es menor o igual a 5 entre esto para limitar las letras a utilizar de A-F*/
+    char caracter = 'A' + codigo;/*en este char realizamos una suma de el codigo en binario +A logrando asi que se empiece en A
+                    y dependiendo de el numero que se sume avanza a la siguiente letra ejemplo A+1=B A+2=C A+3=D......*/
+        return caracter;/*retorna el caracter final */
     }
-    return '$' ;
+    return '$' ;/*en caso de que el valor sea superior a 5 retorna el caracter de $*/
 }
 
 unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int columnas) {
 
     cout << "TABLERO" << endl;
     for (int f=0;f<filas; ++f) {
-            cout << " FILA "<< f << " ";
+            cout << " FILA "<< f << " ";/*va a imprimir en que fila esta cada una empezando desde 0*/
     for (int c=0;c<columnas;++c){
-            int valor = leerfichas(memoria,columnas,f,c);
-            cout << obtenercaracter(valor) << " " ;
+            int valor = leerfichas(memoria,columnas,f,c);/*va a retornar cada ficha en cada posicion que se solicite de acuerdo
+                                                            al indice que se pida en fila y columna*/
+            cout << obtenercaracter(valor) << " " ;/*imprime el caracter de acuerdo a los bits que retorne de la funcion leerfichas
+                                                    entrando en la funcion obtenercaracter retornando cada letra de acuerdo a
+                                                    el valor que se le entregue  */
 
         }
     cout << endl;
@@ -143,7 +147,7 @@ unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int col
 }
 
     unsigned char* imprimirtablerobinario ( unsigned char* memoria, int filas,int columnas) {
-        int totalbytes = calcularbytesnecesarios(filas,columnas);
+        int totalbytes = calcularbytesnecesarios(filas,columnas);/*ejecutamos la funcion calcularbytesnecesarios*/
         cout << "ram en binario memoria fisica" << endl;
         for (int b=0;b<totalbytes; ++b) {
             cout << "byte"<< b << " : " << endl;
