@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
     srand(time(0));
-    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0;
+    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0,eliminacionesusuario = 0;
 
 
 
@@ -52,11 +52,11 @@ int main()
 
 
          if (opcion ==1){
-             memoria =imprinmirtablerofichas(fila, columna);
+             memoria =imprimirtablerofichas(memoria,fila, columna);
 
          }
          else if(opcion ==2){
-             memoria =imprimirtablerosbinario(memoria,fila,columna);
+             memoria =imprimirtablerobinario(memoria,fila,columna);
          }
 
 

@@ -7,71 +7,117 @@ using namespace std;
 
 
 int calcularbytesnecesarios (int filas , int columnas) {
-    int totalbits = filas * columnas * 3;
-    return (totalbits + 7) /8;
+    int totalbits = filas * columnas * 3;/*verificamos la cantidad de bits necesarios al multiplicar la cantidad de filas y columnas
+                                         y luego multiplicamos x 3 que son la cantidad de bits que va a llevar cada ficha */
+    return (totalbits + 7) /8;/*sumamos 7 bits con la intencion de completar si llega a faltar para completar la ultima ficha
+                                posteriormente dividimos entre 8 para obtener la cantidad de bytes que van a requerir estas fichas*/
 }
 unsigned char* guardarficha ( unsigned char* memoria,int columnas, int fila,int columna, int valor){
     valor =  valor & 7 ;
-    int indiceficha = fila * columnas + columna;
-    int bitinicial = indiceficha * 3;
-    int numerobytes = bitinicial/8;
-    int posicionenbyte = bitinicial % 8;
+    int indiceficha = fila * columnas + columna;/*se multiplica la cantidad de columnas por la fila y columna en la que
+                                                vamos guardar cada ficha dandonos la pocision donde se va a guardar cada
+                                                ficha*/
+    int bitinicial = indiceficha * 3; //se multiplica por la cantidad de bits que requiere cada ficha//
+    int numerobytes = bitinicial/8;/*se divide por la cantidad de bits que tiene cada byte para obtener
+                                    la posicion donde vamos a guardar los bits */
+    int posicionenbyte = bitinicial % 8;/*nos da la posicion desde la cual vamos a empezar
+                                            a guardar los bits siendo este el residuo*/
 
-    if (posicionenbyte <= 5) {
-        memoria[numerobytes] &= ~(7 << posicionenbyte);
-        memoria[numerobytes] |= (valor << posicionenbyte);
+    if (posicionenbyte <= 5) {/*si la posicion de guardado es menor a 5 sabemos que va a quedar en ese byte y no requerira
+                                pegarse a otro y entra*/
+        memoria[numerobytes] &= ~(7 << posicionenbyte);/* realizamos una limpieza con el operador de negacion en
+                                                        bits, invirtiendo cada 0 a 1  y viceversa realiza una mascara
+                                                        al 7 pero primero lo desplaza hacia la izquierda la cantidad
+                                                        de pocision en byte */
+        memoria[numerobytes] |= (valor << posicionenbyte);/* se aplica el operador or| para introducir la ficha (valor)
+                                        pero primero se desplaza  hacia la isquierda la cantidad de posicionenbyte*/
     }
-    else if (posicionenbyte == 6) {
-        int parte1 = valor & 3;
-        int parte2 = (valor >> 2) & 1;
-        memoria[numerobytes] &= ~(3 << 6);
-        memoria[numerobytes] |= (parte1 << 6);
+    else if (posicionenbyte == 6) {/*si la posicion de guardado es igual a 6 requerira quedar con 2 bits dentro de este byte
+                                    y 1 bit dentro del otro byte siendo necesario hacer lo siguiente */
+        int parte1 = valor & 3;  /*se le aplica mascara 3 a la ficha que esta en la variable valor para extraer solo los 2
+                                    ultimos bits de mas a la derecha */
+        int parte2 = (valor >> 2) & 1;/* desplazamos los bits 2 espacios hacia la derecha quedando solo
+                                    el 3 bit de derecha a izquierda y aplicamos mascara 1 para quedarnos con ese bit restante */
+        memoria[numerobytes] &= ~(3 << 6);/*seleccionamos el byte donde va a quedar guardado se desplaza 6 espacios hacia la
+                                izquierda aplicamos mascara 3 y utilizamos el operador de negacion para invertir cada bit
+                                que este en 0 queda en uno y viceversa con la intencion de limpiar el espacio de guardado */
+        memoria[numerobytes] |= (parte1 << 6);/*seleccionamos el espacio de guardado en memoria coje el valor de parte 1
+                                            y lo desplaza 6 puestos hacia la izquierda se aplica el operador or | para poder colocar
+                                            los bits en la pocision 6 y 7 */
 
-        memoria[numerobytes + 1] &= ~1;
-        memoria[numerobytes + 1] |= parte2;
+        memoria[numerobytes + 1] &= ~1;/*seleccionamos el byte +1 posicion para guardar la continuacion de los bits
+                                        y guardar el bit sobrante que tenemos en la parte 2 para esto aplicamos mascara 1
+                                        y utilizamos el operador nulo para limpiar la posicion donde vamos a guardar bit 0*/
+        memoria[numerobytes + 1] |= parte2;/*seleccionamos el bite +1 y le añadimos la parte 2 con el operador or */
     }
-    else {
-        int parte1 = valor & 1;
-        int parte2 = (valor >> 1) & 3;
+    else {/*si la posicion de guardado es superior a 6  tomara este camino siendo esta como maximo 7 ya que
+                                esto lo determina el modulo 8 que aplicamos en un principio quedando de reciduo del 0 al 7*/
+        int parte1 = valor & 1; /*esto nos indica que nos va a quedar solo un espacio por tomar de los bits y vamos a requerir
+                                tomar los otros 2 de el siguiente byte asi que empezamos aplicando a la ficha mascara 1
+                                quedandonos con la  posicion 7 del byte*/
+        int parte2 = (valor >> 1) & 3;/*guardamos en la variable parte2 la ficha pero primero la desplazamos 1 posicion hacia
+                                        la derecha y le aplicamos mascara 3 dejandonos asi 2 posiciones de la ficha en el bit 0 y 1*/
 
-        memoria[numerobytes] &= ~(1 << 7);
-        memoria[numerobytes] |= (parte1 << 7);
+        memoria[numerobytes] &= ~(1 << 7);/*seleccionamos la posicion de guardado para este bit le aplicamos un desplazamiento
+                                        de 7 posiciones hacia la izquierda y le aplicamos mascara 1 y utilizamos el operador
+                                        nulo para limpiar la posicion donde vamos a guardar el bit de la parte1*/
+        memoria[numerobytes] |= (parte1 << 7);/* seleccionamos la posicion de guardado aplicamos el operador or para poner los bits
+                                            de la parte1 pero previo a esto nos desplazamos 7 puestos hacia la izquierda quedando en
+                                            el bit 1 */
 
-        memoria[numerobytes + 1] &= ~3;
-        memoria[numerobytes + 1] |= parte2;
+        memoria[numerobytes + 1] &= ~3;/*seleccionamos la posicion de guardado para estos bits siendo la posicion+1 le aplicamos
+                                        a la posicion mascara 3 y aplicamos el operador nulo coon la intencion de limpiar los bits
+                                        donde se va a guardar los bits que van a complementar la ficha juntando la parte1 y parte2 */
+        memoria[numerobytes + 1] |= parte2;/*seleccionamos la posicion de guardado para los bits y le aplicamos el operador or con
+                                            la intencion de descargar la informacion de la parte 1 */
 
 
     }
-    return memoria;
+    return memoria;/*se guardan las posiciones de memoria con sus respectivos binarios asignados para cada situacion. */
 }
 
 int leerfichas( unsigned char* memoria,int columnas, int fila,int columna) {
 
-    int indiceficha = fila*columnas+columna;
-    int bitinicial = indiceficha*3;
-    int numerobytes = bitinicial/8;
-    int posicionenbyte = bitinicial % 8;
+    int indiceficha = fila*columnas+columna;/*determinamos el indice desde el cual vamos a empezar a leerlas fichas*/
+    int bitinicial = indiceficha*3;/*calculamos la posicion de bits que utiliza cada fila  para ser leida */
+    int numerobytes = bitinicial/8;/*calculamos el byt en el que va a empezar a leer */
+    int posicionenbyte = bitinicial % 8;/*calculamos el byte en el que van a ser leidas las fichas */
 
 
-    if (posicionenbyte <=5){
-        return (memoria[numerobytes]>> posicionenbyte) & 7;
+    if (posicionenbyte <=5){ /*se verifica la posion en la que empiza a leer para poder imprimir mas adelante*/
+        return (memoria[numerobytes]>> posicionenbyte) & 7;/*seleccionamos desde donde vamos a empezar a leer se desplaza hacia la
+        derecha la cantidad de posicionenbyte y le aplica mascara 7 esto con la intencion de garantizar siempre que se desplacen
+        hasta la posicion derecha y pueda retornar el numero exacto realizando una limpieza con mascara 7*/
          }
 
-    else if (posicionenbyte == 6 ){
-        int parte1=( memoria [numerobytes] >> 6)&3;
-        int parte2 = (memoria [numerobytes + 1] & 1)<<2;
-        return parte1|parte2;
+    else if (posicionenbyte == 6 ){ /*verificamos si la posicion en bytes es igual a 6 para continuar con su respectiva operacion*/
+        int parte1=( memoria [numerobytes] >> 6)&3;/*guardamos en el entero parte1 lo que tenemos en la memoria en la posicion
+                                                    numerobytes y lo desplazamos 6 pocisiones hacia la derecha y le aplicamos mascara
+                                                    3 para seleccionar los ultimos 3 bits*/
+        int parte2 = (memoria [numerobytes + 1] & 1)<<2;/*guardamos en el entero parte2 lo que tenemos en la memoria en la posicion
+                                                    numerobytes + 1 le aplicamos mascara 1 y nos quedamos con el ultimo bite
+                                                    y lo desplazamos 2 bits hacia la izquierda */
+    return parte1|parte2; /*retornamos parte1 or parte2 lo cual ejecuta el uno encima del otro logrando esto que queden unidos los
+                            ultimos 3 bits en un solo byte arrojando el numero resultante ejm 00000011
+                                                                                              00000100
+                                                                                            = 00000111 */
 
  }
-         else{
-    int parte1 = (memoria [numerobytes]>>7)&1;
-    int parte2 = (memoria[numerobytes + 1] & 3)<<1;
-    return parte1|parte2;
+         else{/*si es ==7  entre y realice la siguiente operacion*/
+    int parte1 = (memoria [numerobytes]>>7)&1;/*en el entero parte1 guardamos lo que tenemos en memoria en la posicion numerobytes
+                                                realizamos un desplazamiento hacia la derecha de 7 pocisiones y le aplicamos
+                                                mascara 1 con la intencion de tener solo el ultimo bit de esa posicion*/
+    int parte2 = (memoria[numerobytes + 1] & 3)<<1;/*en el entero parte2 guardamos lo que tenemos en la posicion numerobytes+1
+                                                    realizamos una mascara 3 y un desplazamiento de 1 bit hacia la izquierda*/
+    return parte1|parte2;/*retornamos parte1 or parte2 lo cual ejecuta uno encima del otro logrando esto que queden unidos los
+                            ultimos 3 bits en un solo byte de 8 bits arrojando el numero resultante ejm 00000001
+                                                                                                        00000110
+                                                                                                       =00000111 */
 
  }
 
 }
-char obtenercaracter(int valor){
+char obtenercaracter(int valor){/**/
     int codigo = valor & 7;
     if(codigo <=5 ){
     char caracter = 'A' + codigo;
@@ -84,7 +130,7 @@ unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int col
 
     cout << "TABLERO" << endl;
     for (int f=0;f<filas; ++f) {
-            cout << "FILA"<< f << " " << endl;
+            cout << " FILA "<< f << " ";
     for (int c=0;c<columnas;++c){
             int valor = leerfichas(memoria,columnas,f,c);
             cout << obtenercaracter(valor) << " " ;
@@ -110,8 +156,6 @@ unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int col
 
     }
 return memoria;
-
-
 
 
 }
