@@ -5,12 +5,7 @@
 using namespace std;
 
 
-<<<<<<< HEAD
-=======
-        }
-}
 
->>>>>>> 5ce510a3ee520250e04c4f2e7545dd9bdda0af46
 int calcularbytesnecesarios (int filas , int columnas) {
     int totalbits = filas * columnas * 3;
     return (totalbits + 7) /8;
@@ -50,7 +45,7 @@ unsigned char* guardarficha ( unsigned char* memoria,int columnas, int fila,int 
     return memoria;
 }
 
-int leerficha( unsigned char* memoria,int columnas, int fila,int columna) {
+int leerfichas( unsigned char* memoria,int columnas, int fila,int columna) {
 
     int indiceficha = fila*columnas+columna;
     int bitinicial = indiceficha*3;
@@ -83,9 +78,44 @@ char obtenercaracter(int valor){
         return caracter;
     }
     return '$' ;
+}
+
+unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int columnas) {
+
+    cout << "TABLERO" << endl;
+    for (int f=0;f<filas; ++f) {
+            cout << "FILA"<< f << " " << endl;
+    for (int c=0;c<columnas;++c){
+            int valor = leerfichas(memoria,columnas,f,c);
+            cout << obtenercaracter(valor) << " " ;
+
+        }
+    cout << endl;
+        }
+    return memoria;
+
+}
+
+    unsigned char* imprimirtablerobinario ( unsigned char* memoria, int filas,int columnas) {
+        int totalbytes = calcularbytesnecesarios(filas,columnas);
+        cout << "ram en binario memoria fisica" << endl;
+        for (int b=0;b<totalbytes; ++b) {
+            cout << "byte"<< b << " : " << endl;
+            for (int bit = 7 ; bit >= 0; --bit ){
+                cout <<((memoria[b]>> bit) & 1);
+
+
+            }
+            cout << endl;
+
+    }
+return memoria;
+
+
 
 
 }
+
 
 
 
