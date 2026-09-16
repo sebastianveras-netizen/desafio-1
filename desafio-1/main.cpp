@@ -5,11 +5,11 @@
 
 using namespace std;
 
-using namespace std;
+
 int main()
 {
     srand(time(0));
-    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0;
+    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0, eliminacionesusuario=0;
 
 
 
@@ -37,6 +37,7 @@ int main()
 
 
     }
+
 // aqui inician las opciones
 
     int opcion= -1;
@@ -44,7 +45,7 @@ int main()
         cout<<"elije una de las siguientes opciones"<<endl;
 
 
-         cout<<"1. ver tablero"<<endl<<"2. memoria"<<endl<<"3. eliminar casilla "<<endl<<"4. modifical el tablero"<<"0. salir"<<endl;
+         cout<<"1. ver tablero"<<endl<<"2. memoria"<<endl<<"3. eliminar casilla "<<endl<<"4. modifical el tablero"<<endl<<"0. salir"<<endl;
 
 
         cin>>opcion;
@@ -52,11 +53,11 @@ int main()
 
 
          if (opcion ==1){
-             memoria =imprinmirtablerofichas(fila, columna);
+             memoria =imprimirtablerofichas(memoria,fila, columna);
 
          }
          else if(opcion ==2){
-             memoria =imprimirtablerosbinario(memoria,fila,columna);
+             memoria =imprimirtablerobinario(memoria,fila,columna);
          }
 
 
@@ -77,6 +78,7 @@ int main()
 
                      }else{
                          cout<<"no se encuentra la posicion";
+
                      }
 
 
@@ -86,7 +88,7 @@ int main()
 
     }
 
-
+    delete[]memoria;
     return 0;
 }
 
