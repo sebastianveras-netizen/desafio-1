@@ -9,13 +9,10 @@ using namespace std;
 int main()
 {
     srand(time(0));
-<<<<<<< HEAD
+
 
     int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0, eliminacionesusuario=0, nuevosbytes=0;  //declaramos las variables a utilizar
 
-=======
-    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0, eliminacionesusuario=0;
->>>>>>> 8490fbcd6b562d00e394f71ba1119dcf83af617a
 
 
 
@@ -45,14 +42,12 @@ int main()
         }
 
 
-<<<<<<< HEAD
+
 
     }  
-//se recorre todas las celdas i-filas c-columnas
 
-=======
-    }
->>>>>>> 8490fbcd6b562d00e394f71ba1119dcf83af617a
+
+
 
 // aqui inician las opciones
 
@@ -69,7 +64,7 @@ int opcion= -1;
 
 
          if (opcion ==1){
-<<<<<<< HEAD
+
 
              memoria =imprimirtablerofichas(memoria,fila, columna);//llamamos esta funcion para traer los valores almacenados de las fichasaleatorias
 
@@ -77,13 +72,8 @@ int opcion= -1;
          else if(opcion ==2){
              memoria =imprimirtablerobinario(memoria,fila,columna);/*cuando se ejecutamos esta opcion esta imprime la representacion directa
                                                                        en bits o numeros binarios que almacenamos en memoria*/
-=======
-             memoria =imprimirtablerofichas(memoria,fila, columna);
 
-         }
-         else if(opcion ==2){
-             memoria =imprimirtablerobinario(memoria,fila,columna);
->>>>>>> 8490fbcd6b562d00e394f71ba1119dcf83af617a
+
          }
 
 
@@ -108,22 +98,15 @@ int opcion= -1;
                          cout<<"se elimino la ficha" <<endl;
 
                      }else{
-<<<<<<< HEAD
-                         cout<<"no se encuentra la posicion"; //se activa cuando la selecion de fila como columnas no coinciden con el tablero//
-=======
-                         cout<<"no se encuentra la posicion";
 
->>>>>>> 8490fbcd6b562d00e394f71ba1119dcf83af617a
+                         cout<<"no se encuentra la posicion"; //se activa cuando la selecion de fila como columnas no coinciden con el tablero//
+
                      }
          }
 
          else if(opcion==4){
 
-
-             delete[]memoria; //sebas aqui libero memoria
-
-
-             int fila1, columna2=0;
+           int fila1=0, columna1=0;
              cout << "ingrese el valor de la fila: " << endl;
              cin>>fila;
 
@@ -132,24 +115,74 @@ int opcion= -1;
              cin>>columna;
 
 
-             unsigned char* nueva_dir= redimencionar(memoria, fila, columna, fila1,columna2, eliminacionesusuario); //lo datos suministrados van para funcion calcularbytesnecesarios
+             unsigned char* nueva_dir= redimencionar(memoria, fila, columna, fila1,columna1, eliminacionesusuario); //lo datos suministrados van para funcion calcularbytesnecesarios
 
 
              if (nueva_dir!=memoria){
                  memoria=nueva_dir;
                 fila=fila1;
-                 columna=columna2;
+                 columna=columna1;
                 eliminacionesusuario=0;
-             }
 
+             }
 
              cout<<fila<<" "<<columna<<endl;
 
 
          }
+         else if(opcion==5){
+
+             int sub_menu=0, posicion=0;
+
+             cout<<"elije una de las siguientes opciones: "<<endl<<endl;
+
+             cout<<"1. agregar fila "<<endl<<"2. eliminar fila"<<endl<<"3. agregar columna  "<<endl<<"4. eliminar columna "<<endl<<endl;
+             cin>>sub_menu<<endl;
+
+             cout<<"la opcion ingresada fue: "<<sub_menu<<endl;
+
+
+             if(sub_menu==1){
+
+                 cout<<"indique en donde colocar la nueva fila de la 0 a la "<<fila<<": ";
+
+                 cin>>posicion;
+
+                 memoria=agregar_fila(memoria, fila, columna, posicion);
+                 }
+
+             else if(sub_menu==2){
+                 cout<<"indique que fila va a eliminar de la 0 a la "<<fila<<": ";
+                     cin>>posicion;
+
+                 memoria=eliminar_fila(memoria, fila, columna, posicion, eliminacionesusuario);
+
+                 }
+                 else if(sub_menu==3){
+                     cout<<"indique en donde colocar la nueva columna de la 0 a la "<<columna<<": ";
+                     cin>>posicion;
+                     memoria=agregar_columna(memoria, fila, columna, posicion);
+                 }
+
+
+                 else if(sub_menu==4){
+                     cout<<"indique que columna va a eliminar de la 0 a la "<<columna<<": ";
+                     cin>>posicion;
+
+                     memoria=eliminar_columna(memoria, fila, columna, posicion, eliminacionesusuario);
+                 }else{
+                     cout<<"opcion invalida"
+                 }
+
+                 memoria=procesar_cascadas(memoria, fila, columna, posicion, eliminacionesusuario);
+
+         }//cierra opcion 5
+
          else if (opcion==0){
              cout<<"juego finalizado";
          }
+         else{
+             cout<<"opcion invalida "<<endl<<endl;}
 
 
     }
