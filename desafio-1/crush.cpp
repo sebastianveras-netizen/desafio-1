@@ -12,6 +12,12 @@ int calcularbytesnecesarios (int filas , int columnas) {
     return (totalbits + 7) /8;/*sumamos 7 bits con la intencion de completar si llega a faltar para completar la ultima ficha
                                 posteriormente dividimos entre 8 para obtener la cantidad de bytes que van a requerir estas fichas*/
 }
+
+
+
+
+/*devuelve la direccion de memoria donde se almacena el tablero en el heap para realizar los diferentes cambios necesarios apuntando
+ siempre a la localizacion donde se deben realizar los cambios o la lectura de este */
 unsigned char* guardarficha ( unsigned char* memoria,int columnas, int fila,int columna, int valor){
     valor =  valor & 7 ;
     int indiceficha = fila * columnas + columna;/*se multiplica la cantidad de columnas por la fila y columna en la que
@@ -88,7 +94,7 @@ int leerfichas( unsigned char* memoria,int columnas, int fila,int columna) {
         return (memoria[numerobytes]>> posicionenbyte) & 7;/*seleccionamos desde donde vamos a empezar a leer se desplaza hacia la
         derecha la cantidad de posicionenbyte y le aplica mascara 7 esto con la intencion de garantizar siempre que se desplacen
         hasta la posicion derecha y pueda retornar el numero exacto realizando una limpieza con mascara 7*/
-         }
+    }
 
     else if (posicionenbyte == 6 ){ /*verificamos si la posicion en bytes es igual a 6 para continuar con su respectiva operacion*/
         int parte1=( memoria [numerobytes] >> 6)&3;/*guardamos en el entero parte1 lo que tenemos en la memoria en la posicion
@@ -97,42 +103,45 @@ int leerfichas( unsigned char* memoria,int columnas, int fila,int columna) {
         int parte2 = (memoria [numerobytes + 1] & 1)<<2;/*guardamos en el entero parte2 lo que tenemos en la memoria en la posicion
                                                     numerobytes + 1 le aplicamos mascara 1 y nos quedamos con el ultimo bite
                                                     y lo desplazamos 2 bits hacia la izquierda */
-    return parte1|parte2; /*retornamos parte1 or parte2 lo cual ejecuta el uno encima del otro logrando esto que queden unidos los
+        return parte1|parte2; /*retornamos parte1 or parte2 lo cual ejecuta el uno encima del otro logrando esto que queden unidos los
                             ultimos 3 bits en un solo byte arrojando el numero resultante ejm 00000011
                                                                                               00000100
                                                                                             = 00000111 */
 
- }
-         else{/*si es ==7  entre y realice la siguiente operacion*/
-    int parte1 = (memoria [numerobytes]>>7)&1;/*en el entero parte1 guardamos lo que tenemos en memoria en la posicion numerobytes
+    }
+    else{/*si es ==7  entre y realice la siguiente operacion*/
+        int parte1 = (memoria [numerobytes]>>7)&1;/*en el entero parte1 guardamos lo que tenemos en memoria en la posicion numerobytes
                                                 realizamos un desplazamiento hacia la derecha de 7 pocisiones y le aplicamos
                                                 mascara 1 con la intencion de tener solo el ultimo bit de esa posicion*/
-    int parte2 = (memoria[numerobytes + 1] & 3)<<1;/*en el entero parte2 guardamos lo que tenemos en la posicion numerobytes+1
+        int parte2 = (memoria[numerobytes + 1] & 3)<<1;/*en el entero parte2 guardamos lo que tenemos en la posicion numerobytes+1
                                                     realizamos una mascara 3 y un desplazamiento de 1 bit hacia la izquierda*/
-    return parte1|parte2;/*retornamos parte1 or parte2 lo cual ejecuta uno encima del otro logrando esto que queden unidos los
+        return parte1|parte2;/*retornamos parte1 or parte2 lo cual ejecuta uno encima del otro logrando esto que queden unidos los
                             ultimos 3 bits en un solo byte de 8 bits arrojando el numero resultante ejm 00000001
                                                                                                         00000110
                                                                                                        =00000111 */
 
- }
+    }
 
 }
 char obtenercaracter(int valor){
     int codigo = valor & 7;/*toma los bits que estan en (valor) y les aplica mascara 7 */
     if(codigo <=5 ){/*si el resultante en bits es menor o igual a 5 entre esto para limitar las letras a utilizar de A-F*/
-    char caracter = 'A' + codigo;/*en este char realizamos una suma de el codigo en binario +A logrando asi que se empiece en A
+        char caracter = 'A' + codigo;/*en este char realizamos una suma de el codigo en binario +A logrando asi que se empiece en A
                     y dependiendo de el numero que se sume avanza a la siguiente letra ejemplo A+1=B A+2=C A+3=D......*/
         return caracter;/*retorna el caracter final */
     }
     return '$' ;/*en caso de que el valor sea superior a 5 retorna el caracter de $*/
 }
 
-unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int columnas) {
+unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int columnas)
+/*devuelve la direccion de memoria donde se almacena el tablero en el heap para realizar los diferentes cambios necesarios apuntando
+ siempre a la localizacion donde se deben realizar los cambios o la lectura de este */
+{
 
     cout << "      TABLERO     " << endl;
     for (int f=0;f<filas; ++f) {
-            cout << " FILA "<< f << " ";/*va a imprimir en que fila esta cada una empezando desde 0*/
-    for (int c=0;c<columnas;++c){
+        cout << " FILA "<< f << " ";/*va a imprimir en que fila esta cada una empezando desde 0*/
+        for (int c=0;c<columnas;++c){
             int valor = leerfichas(memoria,columnas,f,c);/*va a retornar cada ficha en cada posicion que se solicite de acuerdo
                                                             al indice que se pida en fila y columna*/
             cout << obtenercaracter(valor) << " " ;/*imprime el caracter de acuerdo a los bits que retorne de la funcion leerfichas
@@ -140,32 +149,33 @@ unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int col
                                                     el valor que se le entregue  */
 
         }
-    cout << endl;
-        }
+        cout << endl;
+    }
     return memoria;
 
 }
-
-    unsigned char* imprimirtablerobinario ( unsigned char* memoria, int filas,int columnas) {
-        int totalbytes = calcularbytesnecesarios(filas,columnas);/*ejecutamos la funcion calcularbytesnecesarios*/
-        cout << "ram en binario memoria fisica" << endl;
-        for (int b=0;b<totalbytes; ++b) {
-            cout << "byte"<< b << " : ";/*imprime el byte donde esta guardado la cadena de bits */
-            for (int bit = 7 ; bit >= 0; --bit ){
-                cout <<((memoria[b]>> bit) & 1);/*accede a la cadena de bits que esta en la posicion de el byte
+/*devuelve la direccion de memoria donde se almacena el tablero en el heap para realizar los diferentes cambios necesarios apuntando
+ siempre a la localizacion donde se deben realizar los cambios o la lectura de este */
+unsigned char* imprimirtablerobinario ( unsigned char* memoria, int filas,int columnas) {
+    int totalbytes = calcularbytesnecesarios(filas,columnas);/*ejecutamos la funcion calcularbytesnecesarios*/
+    cout << "ram en binario memoria fisica" << endl;
+    for (int b=0;b<totalbytes; ++b) {
+        cout << "byte"<< b << " : ";/*imprime el byte donde esta guardado la cadena de bits */
+        for (int bit = 7 ; bit >= 0; --bit ){
+            cout <<((memoria[b]>> bit) & 1);/*accede a la cadena de bits que esta en la posicion de el byte
                                                 en la variable memoria*/
 
 
-            }
-            cout << endl;
+        }
+        cout << endl;
 
     }
-return memoria;
+    return memoria;
 
 
 }
-
-
+/*devuelve la direccion de memoria donde se almacena el tablero en el heap para realizar los diferentes cambios necesarios apuntando
+ siempre a la localizacion donde se deben realizar los cambios o la lectura de este */
 unsigned char* redimencionar ( unsigned char* memoria,int filas_actuales, int columnas_actuales,int filas_nuevas, int columnas_nuevas,int eliminaciones){
     int total_casillas= filas_actuales*columnas_actuales;/*verificamos la cantidad de fichas que se implementaron en un principio*/
     int casillas_activas = total_casillas - eliminaciones;/*le restamos la cantidad de fichas eliminadas*/
