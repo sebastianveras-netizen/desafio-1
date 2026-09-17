@@ -9,7 +9,9 @@ using namespace std;
 int main()
 {
     srand(time(0));
-    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0, eliminacionesusuario=0;
+
+    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0, eliminacionesusuario=0;  //declaramos las variables a utilizar
+
 
 
 
@@ -39,7 +41,10 @@ int main()
         }
 
 
-    }
+
+    }  
+//se recorre todas las celdas i-filas c-columnas
+
 
 // aqui inician las opciones
 
@@ -56,11 +61,13 @@ int opcion= -1;
 
 
          if (opcion ==1){
-             memoria =imprimirtablerofichas(memoria,fila, columna);
+
+             memoria =imprimirtablerofichas(memoria,fila, columna);//llamamos esta funcion para traer los valores almacenados de las fichasaleatorias
 
          }
          else if(opcion ==2){
-             memoria =imprimirtablerobinario(memoria,fila,columna);
+             memoria =imprimirtablerobinario(memoria,fila,columna);/*cuando se ejecutamos esta opcion esta imprime la representacion directa
+                                                                       en bits o numeros binarios que almacenamos en memoria*/
          }
 
 
@@ -85,8 +92,7 @@ int opcion= -1;
                          cout<<"se elimino la ficha" <<endl;
 
                      }else{
-                         cout<<"no se encuentra la posicion";
-
+                         cout<<"no se encuentra la posicion"; //se activa cuando la selecion de fila como columnas no coinciden con el tablero//
                      }
 
 
