@@ -10,7 +10,7 @@ int main()
 {
     srand(time(0));
 
-    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0, eliminacionesusuario=0;  //declaramos las variables a utilizar
+    int fila=0, columna=0, seleccion_fila=0, seleccion_columna=0, eliminacionesusuario=0, nuevosbytes=0;  //declaramos las variables a utilizar
 
 
 
@@ -53,7 +53,7 @@ int opcion= -1;
         cout<<"elije una de las siguientes opciones"<<endl;
 
 
-         cout<<"1. ver tablero"<<endl<<"2. memoria"<<endl<<"3. eliminar casilla "<<endl<<"4. modifical el tablero"<<endl<<"0. salir"<<endl;
+         cout<<"1. ver tablero"<<endl<<"2. memoria"<<endl<<"3. eliminar casilla "<<endl<<"4. modifical el tablero"<<endl<<"0. salir"<<endl<<endl;
 
 
         cin>>opcion;
@@ -94,9 +94,40 @@ int opcion= -1;
                      }else{
                          cout<<"no se encuentra la posicion"; //se activa cuando la selecion de fila como columnas no coinciden con el tablero//
                      }
+         }
+
+         else if(opcion==4){
 
 
+             delete[]memoria; //sebas aqui libero memoria
 
+
+             int fila1, columna2=0;
+             cout << "ingrese el valor de la fila: " << endl;
+             cin>>fila;
+
+
+             cout<< "ingresa el valor para las columnas "<<endl;
+             cin>>columna;
+
+
+             unsigned char* nueva_dir= redimencionar(memoria, fila, columna, fila1,columna2, eliminacionesusuario); //lo datos suministrados van para funcion calcularbytesnecesarios
+
+
+             if (nueva_dir!=memoria){
+                 memoria=nueva_dir;
+                fila=fila1;
+                 columna=columna2;
+                eliminacionesusuario=0;
+             }
+
+
+             cout<<fila<<" "<<columna<<endl;
+
+
+         }
+         else if (opcion==0){
+             cout<<"juego finalizado";
          }
 
 
