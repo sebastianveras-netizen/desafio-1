@@ -1,9 +1,10 @@
 #include "crush.h"
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 
 
 using namespace std;
-
 
 
 int calcularbytesnecesarios (int filas , int columnas) {
