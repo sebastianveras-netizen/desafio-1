@@ -98,6 +98,26 @@ int opcion= -1;
 
 
          }
+         else if (opcion==4){
+             int nuevas_filas=0,nuevas_columnas=0;
+
+             cout << "ingrese la nueva cantidad de filas: ";
+                     cin >> nuevas_filas;
+             cout << "ingrese la nueva cantidad de columnas : " ;
+                     cin >> nuevas_columnas;
+
+             unsigned char* nueva_memoria = redimencionar ( memoria,fila,columna,nuevas_filas,nuevas_columnas,eliminacionesusuario);
+
+                     if (nueva_memoria != memoria){
+                 memoria = nueva_memoria;
+                             fila =nuevas_filas;
+                         columna=nuevas_columnas;
+                         eliminacionesusuario=0;
+
+                     }
+
+
+         }
 
 
     }
