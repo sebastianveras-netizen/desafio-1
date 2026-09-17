@@ -82,7 +82,7 @@ int opcion= -1;
                      cin>>seleccion_columna;
 
                      /*se evalua 4 condiciones con && con lo que no aseguramos que todas deben ser verdaderas, donde no dejamos ingrear
-                      indices negativos y que la selecion de filas y columnas no superen el tamaño del tablero, si todo cupmple se llama la fincion
+                      indices negativos y que la selecion de filas y columnas no superen el tamaño del tablero, si todo cuple se llama la funcion
                        la funcion guardarficha.  */
 
                      if (seleccion_fila>=0 && seleccion_fila < fila && seleccion_columna>=0 &&seleccion_columna < columna ){
