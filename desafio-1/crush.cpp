@@ -211,15 +211,103 @@ unsigned char* redimencionar ( unsigned char* memoria,int filas_actuales, int co
     }
     cout << "no puede ser redimencionado el porcentaje es "<< porcentaje << "% el porcentaje debe ser inferior a 65%"<<endl;
     return memoria;/*en caso de que no se redimencione simplemente retorna la memoria original*/
+
+}
+int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminadas){
+    int total_fichas= filas*columnas;
+    bool * marcados = new bool [total_fichas]();
+    int combos_encontrados=0;
+    fichas_eliminadas=0;
+
+    //horizontales
+    for(int f=0; f < filas; ++f ){/*realizamos un recorridos fila por fila */
+        for (int c=0;c< columnas-2; ++c){/*entramos en cada columna de las diferentes filas*/
+            int v1 = leerfichas(memoria,columnas,f,c);
+            int v2 = leerfichas(memoria,columnas,f,c+1);
+            int v3 = leerfichas(memoria,columnas,f,c+2);
+
+            if (v1<=5 && v1 == v2 && v1 == v3){
+                combos_encontrados++;
+                int k = c;
+                    while (k < columnas && leerfichas(memoria,columnas,f,k) == v1){
+                    marcados[f*columnas+k]=true;
+                    k++;
+
+                }
+            }
+
+        }
+
+    }
+    //verticales
+    for(int c=0; c < columnas ; ++c ){/*realizamos un recorridos fila por fila */
+        for (int f=0;f< filas-2; ++f){/*entramos en cada columna de las diferentes filas*/
+            int v1 = leerfichas(memoria,columnas,f,c);
+            int v2 = leerfichas(memoria,columnas,f+1,c);
+            int v3 = leerfichas(memoria,columnas,f+2,c);
+
+            if (v1<=5 && v1 == v2 && v1 == v3){
+                combos_encontrados++;
+                int k = f;
+                while (k < columnas && leerfichas(memoria,columnas,f,k) == v1){
+                    marcados[f*columnas+k]=true;
+                    k++;
+                }
+            }
+        }
+    }
+    for(int f=0; f < filas; ++f ){/*realizamos un recorridos fila por fila */
+        for (int c=0;c< columnas; ++c){/*entramos en cada columna de las diferentes filas*/
+            if (marcados[f*columnas+c]) {
+                fichas_eliminadas++;
+                guardarficha(memoria,columnas,f,c,6);
+            }
+        }
+    }
+    delete [] marcados;
+    return combos_encontrados;
+
 }
 
 
+unsigned char* gravedad_rellenar (unsigned char* memoria,int filas,int columnas){
+    for (int c = 0; c < columnas; c++){
+        int escritura=filas-1;
+        for (int f=filas-1;f>= 0;f--){
+            int v = leerfichas(memoria,columnas,f,c);
+            if (v <=5){
+                guardarficha(memoria,columnas,escritura,c,v);
+                escritura--;
+            }
+        }
+        while (escritura>=0){
+            int ficha_nueva= rand()%6;
+            guardarficha(memoria,columnas,escritura,c,ficha_nueva);
+            escritura--;
+
+        }
+    }
+
+    return memoria;
+}
 
 
+unsigned char* cascada(unsigned char* memoria,int filas,int columnas,int& puntaje,int& total_combos){
 
+    while (true){
+        int fichas_eliminadas=0;
+        int combos1= combos ( memoria,filas,columnas,fichas_eliminadas);
+        if (combos1 == 0){
+            break;
+        }
 
+        total_combos=combos1;
+        puntaje += (fichas_eliminadas*10);
 
-
+        memoria = gravedad_rellenar(memoria,filas,columnas);
+    }
+    return memoria;
+}
 
 
 
