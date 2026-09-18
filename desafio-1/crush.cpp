@@ -249,8 +249,8 @@ int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminad
             if (v1<=5 && v1 == v2 && v1 == v3){
                 combos_encontrados++;
                 int k = f;
-                while (k < columnas && leerfichas(memoria,columnas,f,k) == v1){
-                    marcados[f*columnas+k]=true;
+                while (k < columnas && leerfichas(memoria,columnas,k,c) == v1){
+                    marcados[k*columnas+c]=true;
                     k++;
                 }
             }
@@ -258,7 +258,8 @@ int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminad
     }
     for(int f=0; f < filas; ++f ){/*realizamos un recorridos fila por fila */
         for (int c=0;c< columnas; ++c){/*entramos en cada columna de las diferentes filas*/
-            if (marcados[f*columnas+c]) {
+
+            if (marcados [f * columnas + c]) {
                 fichas_eliminadas++;
                 guardarficha(memoria,columnas,f,c,6);
             }
