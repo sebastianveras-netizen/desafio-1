@@ -166,6 +166,31 @@ unsigned char* imprimirtablerobinario ( unsigned char* memoria, int filas,int co
             cout <<((memoria[b]>> bit) & 1);/*accede a la cadena de bits que esta en la posicion de el byte
                                                 en la variable memoria*/
 
+}
+/*devuelve la direccion de memoria donde se almacena el tablero en el heap para realizar los diferentes cambios necesarios apuntando
+ siempre a la localizacion donde se deben realizar los cambios o la lectura de este */
+unsigned char* redimencionar ( unsigned char* memoria,int filas_actuales, int columnas_actuales,int filas_nuevas, int columnas_nuevas,int eliminaciones){
+    int total_casillas= filas_actuales*columnas_actuales;/*verificamos la cantidad de fichas que se implementaron en un principio*/
+    int casillas_activas = total_casillas - eliminaciones;/*le restamos la cantidad de fichas eliminadas*/
+
+    double porcentaje=((double)casillas_activas/total_casillas)*100.0;/*sacamos el porcentaje que queda de fichas*/
+    if (porcentaje < 65.0){/*si el porcentaje es inferior a 65% entra */
+        delete [] memoria;/*eliminamos la memoria dinamica que existe en la variable memoria*/
+
+        int nuevos_bytes = calcularbytesnecesarios(filas_nuevas,columnas_nuevas);/*verificamos cuantos bytes requiere nuestra cuadricula
+                                                                                de acuerdo a nuestras nuevas dimenciones*/
+        unsigned char* nueva_memoria = new unsigned char [nuevos_bytes]();/*asignamos un puntero a nuestra nueva memoria con un arreglo
+                                                                        que varia de acuerdo a la cantidad de bytes que hayamos calculado
+                                                                        con la funcion anterior*/
+
+        for(int f=0; f < filas_nuevas; ++f ){/*realizamos un recorridos fila por fila */
+            for (int c=0;c< columnas_nuevas; ++c){/*entramos en cada columna de las diferentes filas*/
+                int fichaaleatoria= rand() %6;/*asignamos un numero aleatorio gracias a la semilla que implementa rand y aplicamos modulo 6
+                                            para limitar la cantidad de letras a un maximo de 5 siendo desde la A hasta la F*/
+                nueva_memoria = guardarficha(nueva_memoria,columnas_nuevas,f,c,fichaaleatoria);/*de acuerdo a la fila y columna en la que
+                                                                                entramos guardamos una determinada ficha que sera almacenada
+                                                                                de acuerdo a ala estructura y cantidad de cada byte siendo
+                                                                                explicado en la funcion guardarficha */
 
         }
         cout << endl;
@@ -173,6 +198,14 @@ unsigned char* imprimirtablerobinario ( unsigned char* memoria, int filas,int co
     }
     return memoria;
 
+        }
+
+        cout << "redimensionamiento completado dimencion antigua"<< porcentaje << "% " <<endl;
+        return nueva_memoria;/*se almacena la informacion en nueva memoria para poder ser invocado mas adelante*/
+
+    }
+    cout << "no puede ser redimencionado el porcentaje es "<< porcentaje << "% el porcentaje debe ser inferior a 65%"<<endl;
+    return memoria;/*en caso de que no se redimencione simplemente retorna la memoria original*/
 
 }
 /*devuelve la direccion de memoria donde se almacena el tablero en el heap para realizar los diferentes cambios necesarios apuntando
@@ -201,42 +234,6 @@ unsigned char* redimencionar ( unsigned char* memoria,int filas_actuales, int co
                                                                                 explicado en la funcion guardarficha */
 
             }
-
-
-        }
-
-        cout << "redimensionamiento completado dimencion antigua"<< porcentaje << "% " <<endl;
-        return nueva_memoria;/*se almacena la informacion en nueva memoria para poder ser invocado mas adelante*/
-
-    }
-    cout << "no puede ser redimencionado el porcentaje es "<< porcentaje << "% el porcentaje debe ser inferior a 65%"<<endl;
-    return memoria;/*en caso de que no se redimencione simplemente retorna la memoria original*/
-
-}
-int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminadas){
-    int total_fichas= filas*columnas;
-    bool * marcados = new bool [total_fichas]();
-    int combos_encontrados=0;
-    fichas_eliminadas=0;
-
-    //horizontales
-    for(int f=0; f < filas; ++f ){/*realizamos un recorridos fila por fila */
-        for (int c=0;c< columnas-2; ++c){/*entramos en cada columna de las diferentes filas*/
-            int v1 = leerfichas(memoria,columnas,f,c);
-            int v2 = leerfichas(memoria,columnas,f,c+1);
-            int v3 = leerfichas(memoria,columnas,f,c+2);
-
-            if (v1<=5 && v1 == v2 && v1 == v3){
-                combos_encontrados++;
-                int k = c;
-                    while (k < columnas && leerfichas(memoria,columnas,f,k) == v1){
-                    marcados[f*columnas+k]=true;
-                    k++;
-
-                }
-            }
-
-        }
 
     }
     //verticales
@@ -267,6 +264,14 @@ int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminad
     delete [] marcados;
     return combos_encontrados;
 
+        }
+
+        cout << "redimensionamiento completado dimencion antigua"<< porcentaje << "% " <<endl;
+        return nueva_memoria;/*se almacena la informacion en nueva memoria para poder ser invocado mas adelante*/
+
+    }
+    cout << "no puede ser redimencionado el porcentaje es "<< porcentaje << "% el porcentaje debe ser inferior a 65%"<<endl;
+    return memoria;/*en caso de que no se redimencione simplemente retorna la memoria original*/
 }
 
 
