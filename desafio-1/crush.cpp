@@ -95,7 +95,9 @@ int leerfichas( unsigned char* memoria,int columnas, int fila,int columna) {
         return (memoria[numerobytes]>> posicionenbyte) & 7;/*seleccionamos desde donde vamos a empezar a leer se desplaza hacia la
         derecha la cantidad de posicionenbyte y le aplica mascara 7 esto con la intencion de garantizar siempre que se desplacen
         hasta la posicion derecha y pueda retornar el numero exacto realizando una limpieza con mascara 7*/
+
     }
+
 
     else if (posicionenbyte == 6 ){ /*verificamos si la posicion en bytes es igual a 6 para continuar con su respectiva operacion*/
         int parte1=( memoria [numerobytes] >> 6)&3;/*guardamos en el entero parte1 lo que tenemos en la memoria en la posicion
@@ -104,10 +106,15 @@ int leerfichas( unsigned char* memoria,int columnas, int fila,int columna) {
         int parte2 = (memoria [numerobytes + 1] & 1)<<2;/*guardamos en el entero parte2 lo que tenemos en la memoria en la posicion
                                                     numerobytes + 1 le aplicamos mascara 1 y nos quedamos con el ultimo bite
                                                     y lo desplazamos 2 bits hacia la izquierda */
+
+
+
         return parte1|parte2; /*retornamos parte1 or parte2 lo cual ejecuta el uno encima del otro logrando esto que queden unidos los
+
                             ultimos 3 bits en un solo byte arrojando el numero resultante ejm 00000011
                                                                                               00000100
                                                                                             = 00000111 */
+
 
     }
     else{/*si es ==7  entre y realice la siguiente operacion*/
@@ -117,7 +124,7 @@ int leerfichas( unsigned char* memoria,int columnas, int fila,int columna) {
         int parte2 = (memoria[numerobytes + 1] & 3)<<1;/*en el entero parte2 guardamos lo que tenemos en la posicion numerobytes+1
                                                     realizamos una mascara 3 y un desplazamiento de 1 bit hacia la izquierda*/
         return parte1|parte2;/*retornamos parte1 or parte2 lo cual ejecuta uno encima del otro logrando esto que queden unidos los
-                            ultimos 3 bits en un solo byte de 8 bits arrojando el numero resultante ejm 00000001
+                                ultimos 3 bits en un solo byte de 8 bits arrojando el numero resultante ejm 00000001
                                                                                                         00000110
                                                                                                        =00000111 */
 
@@ -127,6 +134,7 @@ int leerfichas( unsigned char* memoria,int columnas, int fila,int columna) {
 char obtenercaracter(int valor){
     int codigo = valor & 7;/*toma los bits que estan en (valor) y les aplica mascara 7 */
     if(codigo <=5 ){/*si el resultante en bits es menor o igual a 5 entre esto para limitar las letras a utilizar de A-F*/
+
         char caracter = 'A' + codigo;/*en este char realizamos una suma de el codigo en binario +A logrando asi que se empiece en A
                     y dependiendo de el numero que se sume avanza a la siguiente letra ejemplo A+1=B A+2=C A+3=D......*/
         return caracter;/*retorna el caracter final */
@@ -141,8 +149,10 @@ unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int col
 
     cout << "      TABLERO     " << endl;
     for (int f=0;f<filas; ++f) {
-        cout << " FILA "<< f << " ";/*va a imprimir en que fila esta cada una empezando desde 0*/
-        for (int c=0;c<columnas;++c){
+
+            cout << " FILA "<< f << " ";/*va a imprimir en que fila esta cada una empezando desde 0*/
+    for (int c=0;c<columnas;++c){
+
             int valor = leerfichas(memoria,columnas,f,c);/*va a retornar cada ficha en cada posicion que se solicite de acuerdo
                                                             al indice que se pida en fila y columna*/
             cout << obtenercaracter(valor) << " " ;/*imprime el caracter de acuerdo a los bits que retorne de la funcion leerfichas
@@ -155,6 +165,7 @@ unsigned char* imprimirtablerofichas ( unsigned char* memoria, int filas,int col
     return memoria;
 
 }
+
 /*devuelve la direccion de memoria donde se almacena el tablero en el heap para realizar los diferentes cambios necesarios apuntando
  siempre a la localizacion donde se deben realizar los cambios o la lectura de este */
 unsigned char* imprimirtablerobinario ( unsigned char* memoria, int filas,int columnas) {
@@ -195,7 +206,7 @@ unsigned char* redimencionar ( unsigned char* memoria,int filas_actuales, int co
         }
         cout << endl;
 
-    }
+
     return memoria;
 
         }
@@ -206,6 +217,7 @@ unsigned char* redimencionar ( unsigned char* memoria,int filas_actuales, int co
     }
     cout << "no puede ser redimencionado el porcentaje es "<< porcentaje << "% el porcentaje debe ser inferior a 65%"<<endl;
     return memoria;/*en caso de que no se redimencione simplemente retorna la memoria original*/
+
 
 }
 /*devuelve la direccion de memoria donde se almacena el tablero en el heap para realizar los diferentes cambios necesarios apuntando
@@ -272,6 +284,7 @@ unsigned char* redimencionar ( unsigned char* memoria,int filas_actuales, int co
     }
     cout << "no puede ser redimencionado el porcentaje es "<< porcentaje << "% el porcentaje debe ser inferior a 65%"<<endl;
     return memoria;/*en caso de que no se redimencione simplemente retorna la memoria original*/
+
 }
 
 
