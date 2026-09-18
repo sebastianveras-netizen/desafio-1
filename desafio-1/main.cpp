@@ -51,7 +51,7 @@ int main()
 
     // aqui inician las opciones
 
-    int opcion= -1;
+int opcion= -1;
     while (opcion!=0){
         cout<<"elije una de las siguientes opciones"<<endl;
 
@@ -110,6 +110,7 @@ int main()
             cout << "ingrese el valor de la fila: " << endl;
             cin>>fila1;
 
+                 cin>>posicion;
 
             cout<< "ingresa el valor para las columnas "<<endl;
             cin>>columna1;
