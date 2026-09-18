@@ -310,6 +310,27 @@ unsigned char* cascada(unsigned char* memoria,int filas,int columnas,int& puntaj
     return memoria;
 }
 
+unsigned char* agregar_fila(unsigned char* memoria,int& filas,int columnas,int indice){
+
+    int nuevas_filas= filas+1;
+    int bytes = calcularbytesnecesarios(nuevas_filas,columnas);
+    unsigned char* nueva = new unsigned char[bytes]();
+
+
+    for (int f=0; 0<nuevas_filas;f++){
+        for (int c=0; 0<columnas;c++){
+            if (f<indice){
+            int valor=leerfichas(memoria,columnas,f,c);
+                guardarficha(nueva,columnas,f,c,valor);
+            } else if (f==indice){
+              guardarficha(nueva,columnas,f,c,rand()%6);
+
+            }
+
+        }
+
+}
+
 
 
 
