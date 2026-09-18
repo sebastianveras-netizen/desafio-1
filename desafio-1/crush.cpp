@@ -173,7 +173,6 @@ unsigned char* imprimirtablerobinario ( unsigned char* memoria, int filas,int co
     }
     return memoria;
 
-
 }
 /*devuelve la direccion de memoria donde se almacena el tablero en el heap para realizar los diferentes cambios necesarios apuntando
  siempre a la localizacion donde se deben realizar los cambios o la lectura de este */
@@ -199,7 +198,6 @@ unsigned char* redimencionar ( unsigned char* memoria,int filas_actuales, int co
                                                                                 entramos guardamos una determinada ficha que sera almacenada
                                                                                 de acuerdo a ala estructura y cantidad de cada byte siendo
                                                                                 explicado en la funcion guardarficha */
-
             }
 
 
@@ -414,22 +412,3 @@ unsigned char* eliminar_columna(unsigned char* memoria,int filas,int& columnas,i
     eliminacionesusuario=0;
     return nueva;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
