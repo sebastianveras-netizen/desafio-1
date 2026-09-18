@@ -229,7 +229,7 @@ int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminad
             if (v1<=5 && v1 == v2 && v1 == v3){
                 combos_encontrados++;
                 int k = c;
-                    while (k < columnas && leerfichas(memoria,columnas,f,k) == v1){
+                while (k < columnas && leerfichas(memoria,columnas,f,k) == v1){
                     marcados[f*columnas+k]=true;
                     k++;
 
@@ -317,20 +317,103 @@ unsigned char* agregar_fila(unsigned char* memoria,int& filas,int columnas,int i
     unsigned char* nueva = new unsigned char[bytes]();
 
 
-    for (int f=0; 0<nuevas_filas;f++){
-        for (int c=0; 0<columnas;c++){
+    for (int f=0; f<nuevas_filas;f++){
+        for (int c=0; c<columnas;c++){
             if (f<indice){
-            int valor=leerfichas(memoria,columnas,f,c);
+                int valor=leerfichas(memoria,columnas,f,c);
                 guardarficha(nueva,columnas,f,c,valor);
             } else if (f==indice){
-              guardarficha(nueva,columnas,f,c,rand()%6);
+                guardarficha(nueva,columnas,f,c,rand()%6);
+            }else {int valor=leerfichas(memoria,columnas,f-1,c);
+                guardarficha(nueva,columnas,f,c,valor);
 
             }
+        }
+
+    }
+    delete[] memoria;
+    filas= nuevas_filas;
+    return nueva;
+}
+
+unsigned char* eliminar_fila(unsigned char* memoria,int& filas,int columnas,int indice,int& eliminacionesusuario){
+
+    if (filas<=1) return memoria;
+    int nuevas_filas =filas-1;
+    int bytes = calcularbytesnecesarios(nuevas_filas,columnas);
+    unsigned char* nueva = new unsigned char[bytes]();
+
+
+    for (int f=0; f< filas;f++){
+        if (f==indice) continue;
+        int f_destino = (f<indice) ? f : f-1;
+        for (int c=0; c<columnas;c++){
+            int valor=leerfichas(memoria,columnas,f,c);
+            guardarficha(nueva,columnas,f_destino,c,valor);
+
 
         }
 
+    }
+    delete[] memoria;
+    filas= nuevas_filas;
+    eliminacionesusuario=0;
+    return nueva;
 }
 
+
+unsigned char* agregar_columna(unsigned char* memoria,int filas,int& columnas,int indice){
+
+    int nuevas_columnas= columnas+1;
+    int bytes = calcularbytesnecesarios(filas,nuevas_columnas);
+    unsigned char* nueva = new unsigned char[bytes]();
+
+
+    for (int f=0; f<filas;f++){
+        for (int c=0; c<nuevas_columnas;c++){
+            if (c<indice){
+                int valor=leerfichas(memoria,columnas,f,c);
+                guardarficha(nueva,nuevas_columnas,f,c,valor);
+            } else if (c==indice){
+                guardarficha(nueva,nuevas_columnas,f,c,rand()%6);
+            }else {int valor=leerfichas(memoria,columnas,f,c-1);
+                guardarficha(nueva,nuevas_columnas,f,c,valor);
+
+            }
+        }
+
+    }
+    delete[] memoria;
+    columnas= nuevas_columnas;
+    return nueva;
+}
+
+
+
+unsigned char* eliminar_columna(unsigned char* memoria,int filas,int& columnas,int indice,int& eliminacionesusuario){
+
+    if (columnas<=1) return memoria;
+    int nuevas_columnas =columnas-1;
+    int bytes = calcularbytesnecesarios(filas,nuevas_columnas);
+    unsigned char* nueva = new unsigned char[bytes]();
+
+
+    for (int f=0; f< filas;f++){
+        for (int c=0; c<columnas;c++){
+            if (c==indice) continue;
+            int c_destino = (c<indice) ? c : c-1;
+            int valor=leerfichas(memoria,columnas,f,c);
+            guardarficha(nueva,nuevas_columnas,f,c_destino,valor);
+
+
+        }
+
+    }
+    delete[] memoria;
+    columnas= nuevas_columnas;
+    eliminacionesusuario=0;
+    return nueva;
+}
 
 
 
