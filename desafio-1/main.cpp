@@ -51,6 +51,10 @@ int main()
 
     // aqui inician las opciones
 
+
+
+    // aqui inician las opciones
+
 int opcion= -1;
     while (opcion!=0){
         cout<<"elije una de las siguientes opciones"<<endl;
@@ -111,6 +115,12 @@ int opcion= -1;
             cin>>fila1;
 
                  cin>>posicion;
+
+            cout<< "ingresa el valor para las columnas "<<endl;
+            cin>>columna1;
+
+
+            unsigned char* nueva_dir= redimencionar(memoria, fila, columna, fila1,columna1, eliminacionesusuario); //lo datos suministrados van para funcion calcularbytesnecesarios
 
             cout<< "ingresa el valor para las columnas "<<endl;
             cin>>columna1;

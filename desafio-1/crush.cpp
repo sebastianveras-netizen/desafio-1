@@ -268,26 +268,6 @@ int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminad
 
 }
 
-        }
-
-unsigned char* gravedad_rellenar (unsigned char* memoria,int filas,int columnas){
-    for (int c = 0; c < columnas; c++){
-        int escritura=filas-1;
-        for (int f=filas-1;f>= 0;f--){
-            int v = leerfichas(memoria,columnas,f,c);
-            if (v <=5){
-                guardarficha(memoria,columnas,escritura,c,v);
-                escritura--;
-            }
-        }
-        while (escritura>=0){
-            int ficha_nueva= rand()%6;
-            guardarficha(memoria,columnas,escritura,c,ficha_nueva);
-            escritura--;
-
-        }
-    }
-
     return memoria;
 }
 int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminadas){
@@ -313,7 +293,28 @@ int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminad
                 }
             }
 
+unsigned char* gravedad_rellenar (unsigned char* memoria,int filas,int columnas){
+    for (int c = 0; c < columnas; c++){
+        int escritura=filas-1;
+        for (int f=filas-1;f>= 0;f--){
+            int v = leerfichas(memoria,columnas,f,c);
+            if (v <=5){
+                guardarficha(memoria,columnas,escritura,c,v);
+                escritura--;
+            }
         }
+        while (escritura>=0){
+            int ficha_nueva= rand()%6;
+            guardarficha(memoria,columnas,escritura,c,ficha_nueva);
+            escritura--;
+
+        }
+    }
+
+    return memoria;
+}
+
+unsigned char* agregar_fila(unsigned char* memoria,int& filas,int columnas,int indice){
 
 unsigned char* cascada(unsigned char* memoria,int filas,int columnas,int& puntaje,int& total_combos){
 
@@ -338,7 +339,8 @@ unsigned char* agregar_fila(unsigned char* memoria,int& filas,int columnas,int i
     int bytes = calcularbytesnecesarios(nuevas_filas,columnas);
     unsigned char* nueva = new unsigned char[bytes]();
 
-}
+            }
+        }
 
     for (int f=0; f<nuevas_filas;f++){
         for (int c=0; c<columnas;c++){
@@ -365,16 +367,6 @@ unsigned char* eliminar_fila(unsigned char* memoria,int& filas,int columnas,int 
     int nuevas_filas =filas-1;
     int bytes = calcularbytesnecesarios(nuevas_filas,columnas);
     unsigned char* nueva = new unsigned char[bytes]();
-
-    while (true){
-        int fichas_eliminadas=0;
-        int combos1= combos ( memoria,filas,columnas,fichas_eliminadas);
-        if (combos1 == 0){
-            break;
-        }
-
-        total_combos=combos1;
-        puntaje += (fichas_eliminadas*10);
 
         memoria = gravedad_rellenar(memoria,filas,columnas);
     }
