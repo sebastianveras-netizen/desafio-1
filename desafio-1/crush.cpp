@@ -249,7 +249,7 @@ int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminad
             if (v1<=5 && v1 == v2 && v1 == v3){
                 combos_encontrados++;
                 int k = f;
-                while (k < columnas && leerfichas(memoria,columnas,k,c) == v1){
+                while (k < filas && leerfichas(memoria,columnas,k,c) == v1){
                     marcados[k*columnas+c]=true;
                     k++;
                 }
@@ -302,7 +302,7 @@ unsigned char* cascada(unsigned char* memoria,int filas,int columnas,int& puntaj
             break;
         }
 
-        total_combos=combos1;
+        total_combos +=combos1;
         puntaje += (fichas_eliminadas*10);
 
         memoria = gravedad_rellenar(memoria,filas,columnas);
