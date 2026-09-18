@@ -212,44 +212,46 @@ unsigned char* redimencionar ( unsigned char* memoria,int filas_actuales, int co
 
 }
 int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminadas){
-    int total_fichas= filas*columnas;
-    bool * marcados = new bool [total_fichas]();
-    int combos_encontrados=0;
-    fichas_eliminadas=0;
+    int total_fichas= filas*columnas;/*verificamos el total de fichas */
+    bool * marcados = new bool [total_fichas]();/*marcamos los lugares espesificos donde las fichas son iguales*/
+    int combos_encontrados=0;/*contabilizamos cada combo que encontramos*/
+    fichas_eliminadas=0;/*contamos las fichas eliminadas*/
 
-    //horizontales
+    //fichas horizontales
     for(int f=0; f < filas; ++f ){/*realizamos un recorridos fila por fila */
-        for (int c=0;c< columnas-2; ++c){/*entramos en cada columna de las diferentes filas*/
-            int v1 = leerfichas(memoria,columnas,f,c);
-            int v2 = leerfichas(memoria,columnas,f,c+1);
-            int v3 = leerfichas(memoria,columnas,f,c+2);
+        for (int c=0;c< columnas-2; ++c){/*entramos en cada columna de las diferentes filas teniendo en cuenta que se limita a entrar hasta 2 posiciones antes de finalizar
+                                        para que asi no haya un desbordaniemto */
+            int v1 = leerfichas(memoria,columnas,f,c);/*lee la ficha en la  psicion c y guarda la ficha en v1*/
+            int v2 = leerfichas(memoria,columnas,f,c+1);/*lee la ficha en la  posicion c+1 y guarda la ficha en v2*/
+            int v3 = leerfichas(memoria,columnas,f,c+2);/*lee la fiha en la  posicion c+2 y guarda la ficha en v3*/
 
-            if (v1<=5 && v1 == v2 && v1 == v3){
-                combos_encontrados++;
-                int k = c;
-                while (k < columnas && leerfichas(memoria,columnas,f,k) == v1){
-                    marcados[f*columnas+k]=true;
-                    k++;
+            if (v1<=5 && v1 == v2 && v1 == v3){/*verifica que la ficha v1 no sea un numero superior a 5  y verifica si las fichas siguientes son iguales a la v1*/
+                combos_encontrados++;/*si se cumplen las condiciones se incrementa en uno los combos encontrados*/
+                int k = c;/*si se cumplen las coondiciones  anteriores realizamos un cambio de variable para la posicion c */
+                while (k < columnas && leerfichas(memoria,columnas,f,k) == v1){/*mienras k sea menor que la dimencion de  columnas y al leer la ficha en esa posicion
+                                                                            se determina que son iguales a v1 entra al ciclo*/
+                    marcados[f*columnas+k]=true;/*se marca la posicion exacta donde se encuentran las fichas iguales */
+                    k++;/*se incrementa en uno la variable para poder realizar la verificacion de las fichas iguales una a una */
 
                 }
             }
-
         }
 
     }
     //verticales
-    for(int c=0; c < columnas ; ++c ){/*realizamos un recorridos fila por fila */
-        for (int f=0;f< filas-2; ++f){/*entramos en cada columna de las diferentes filas*/
-            int v1 = leerfichas(memoria,columnas,f,c);
-            int v2 = leerfichas(memoria,columnas,f+1,c);
-            int v3 = leerfichas(memoria,columnas,f+2,c);
+    for(int c=0; c < columnas ; ++c ){/*realizamos un recorridos columna por columna */
+        for (int f=0;f< filas-2; ++f){/*entramos en cada fila de las diferentes columnas*/
+            int v1 = leerfichas(memoria,columnas,f,c);/*lee la ficha en la  psicion f y guarda la ficha en v1*/
+            int v2 = leerfichas(memoria,columnas,f+1,c);/*lee la ficha en la  psicion f+1 y guarda la ficha en v2*/
+            int v3 = leerfichas(memoria,columnas,f+2,c);/*lee la ficha en la  psicion f+2 y guarda la ficha en v3*/
 
-            if (v1<=5 && v1 == v2 && v1 == v3){
-                combos_encontrados++;
-                int k = f;
-                while (k < filas && leerfichas(memoria,columnas,k,c) == v1){
-                    marcados[k*columnas+c]=true;
-                    k++;
+            if (v1<=5 && v1 == v2 && v1 == v3){/*verifica que la ficha v1 no sea un numero superior a 5  y verifica si las fichas siguientes son iguales a la v1*/
+                combos_encontrados++;/*si se cumplen las condiciones se incrementa en uno los combos encontrados*/
+                int k = f;/*si se cumplen las coondiciones  anteriores realizamos un cambio de variable para la posicion f */
+                while (k < filas && leerfichas(memoria,columnas,k,c) == v1){/*mienras k sea menor que la dimencion de  filas y al leer la ficha en esa posicion
+                                                                            se determina que son iguales a v1 entra al ciclo*/
+                    marcados[k*columnas+c]=true;/*se marca la posicion exacta donde se encuentran las fichas iguales */
+                    k++;/*se incrementa en uno la variable para poder realizar la verificacion de las fichas iguales una a una */
                 }
             }
         }
@@ -257,32 +259,35 @@ int combos ( unsigned char* memoria, int filas,int columnas,int& fichas_eliminad
     for(int f=0; f < filas; ++f ){/*realizamos un recorridos fila por fila */
         for (int c=0;c< columnas; ++c){/*entramos en cada columna de las diferentes filas*/
 
-            if (marcados [f * columnas + c]) {
-                fichas_eliminadas++;
-                guardarficha(memoria,columnas,f,c,6);
+            if (marcados [f * columnas + c]) {/* si la posicion de marcados es true entra al ciclo */
+                fichas_eliminadas++; /*se incrementa en uno la cantidad de fichas eliminadas*/
+                guardarficha(memoria,columnas,f,c,6);/*como anterior mente verificamos si la posicion marcada era true entramos a esa misma posicion y lo marcamos con la ficha
+                                                    de eliminacion que asignamos anteriormente $*/
             }
         }
     }
-    delete [] marcados;
-    return combos_encontrados;
+    delete [] marcados;/*finalizamos el puntero para que no hayan fugas de memoria */
+    return combos_encontrados;/*retornamos la cantidad de combos encontrados */
 
 }
 
 
-unsigned char* gravedad_rellenar (unsigned char* memoria,int filas,int columnas){
-    for (int c = 0; c < columnas; c++){
-        int escritura=filas-1;
-        for (int f=filas-1;f>= 0;f--){
-            int v = leerfichas(memoria,columnas,f,c);
-            if (v <=5){
-                guardarficha(memoria,columnas,escritura,c,v);
-                escritura--;
+unsigned char* gravedad_rellenar (unsigned char* memoria,int filas,int columnas){/*se define una funcion que por medio de un puntero apunta a la direccion de (memoria)
+                                                                                    con la intencion de almacenar los diferentes cambios realizados al tablero */
+    for (int c = 0; c < columnas; c++){/*realizamos un recorrido columna por columna*/
+        int fila_destino=filas-1;/*marca el lugar donde se debe poner la siguiente ficha*/
+        for (int f=filas-1;f>= 0;f--){/*realizamos un recorrido fila por fila desde la posicion mas baja hacia la mas alta */
+            int v = leerfichas(memoria,columnas,f,c);/*guardamos la informacion que recibimos de leerfichas en la posicion que asignamos de acuerdo al recorrido*/
+
+            if (v <=5){/*si la ficha no excede el 5 letra f entra al ciclo*/
+                guardarficha(memoria,columnas,fila_destino,c,v);/*guardamos la ficha en la fila y columna asignada*/
+                fila_destino--;/*reduce en uno  la fila destino para rellenar la siguiente*/
             }
         }
-        while (escritura>=0){
-            int ficha_nueva= rand()%6;
-            guardarficha(memoria,columnas,escritura,c,ficha_nueva);
-            escritura--;
+        while (fila_destino>=0){/*si el contador de filas vacias verifica que es superior a cero entra al ciclo*/
+            int ficha_nueva= rand()%6;/*genera una nueva ficha con la semilla y a la semilla le aplica modulo 6 para limitar la cantidad de letras disponibles */
+            guardarficha(memoria,columnas,fila_destino,c,ficha_nueva);/*guarda las nuevas fichas en las posiciones vacias cerrando asi las posiciones que queden vacias*/
+            fila_destino--;/*reduce en uno la fila destino para rellenar la fila siguiente*/
 
         }
     }
@@ -293,122 +298,136 @@ unsigned char* gravedad_rellenar (unsigned char* memoria,int filas,int columnas)
 
 unsigned char* cascada(unsigned char* memoria,int filas,int columnas,int& puntaje,int& total_combos){
 
-    while (true){
-        int fichas_eliminadas=0;
-        int combos1= combos ( memoria,filas,columnas,fichas_eliminadas);
-        if (combos1 == 0){
-            break;
+    while (true){/*mientras la posicion asignada este marcada con true ingrese al ciclo*/
+        int fichas_eliminadas=0;/*incrementa de uno en uno dependdiendo de las fichas que esten marcadas con el boolleano true*/
+        int combos1= combos ( memoria,filas,columnas,fichas_eliminadas);/*activa la funcion combos para verificar si existe alguna convinacion que elimine fichas*/
+        if (combos1 == 0){/*si combos1 no encuentra ningun combo entra al sicl*/
+            break;/*el siclo es interrumpido por un break obligando a retornar la informacion de memoria */
         }
 
-        total_combos +=combos1;
-        puntaje += (fichas_eliminadas*10);
+        total_combos +=combos1;/*se incrementa la totalidad de combos  dependiendo de los combos que nos retornen la funcion combos*/
+        puntaje += (fichas_eliminadas*10);/*se genera un contador de puntos que nos da 10 puntos por cada ficha eliminada*/
 
-        memoria = gravedad_rellenar(memoria,filas,columnas);
+        memoria = gravedad_rellenar(memoria,filas,columnas);/*se invoca la funcion gravedad rellenar para tapar los espacios generados por la eliminacion de lla funcion commbos*/
     }
     return memoria;
 }
 
 unsigned char* agregar_fila(unsigned char* memoria,int& filas,int columnas,int indice){
 
-    int nuevas_filas= filas+1;
-    int bytes = calcularbytesnecesarios(nuevas_filas,columnas);
-    unsigned char* nueva = new unsigned char[bytes]();
+    int nuevas_filas= filas+1;/*se incrementa en uno la cantidad de filas a tener */
+    int bytes = calcularbytesnecesarios(nuevas_filas,columnas);/*calculamos cuantos bytes requiere de acuerdo ala nueva cantidad de filas */
+    unsigned char* nueva = new unsigned char[bytes]();/*reasignamos la cantidad de memoria a un nuvo puntero siendo este llamado nueva */
 
 
-    for (int f=0; f<nuevas_filas;f++){
-        for (int c=0; c<columnas;c++){
-            if (f<indice){
-                int valor=leerfichas(memoria,columnas,f,c);
-                guardarficha(nueva,columnas,f,c,valor);
-            } else if (f==indice){
-                guardarficha(nueva,columnas,f,c,rand()%6);
-            }else {int valor=leerfichas(memoria,columnas,f-1,c);
-                guardarficha(nueva,columnas,f,c,valor);
+    for (int f=0; f<nuevas_filas;f++){/*realizamos un recorrido fila por fila hasta la posicion de nuevas filas*/
+        for (int c=0; c<columnas;c++){/*realizamos un recorrido columna por columna hasta haber revisado todas las columnas de la hilera de la fila determinada*/
+            if (f<indice){/*si el recorrido de las filas en la posicion f es menor a el indice o posicion asignada de la nueva fila entonces entre al condicional */
+                int valor=leerfichas(memoria,columnas,f,c);/*el entero valor va a guardar la informacion asignada a leerfichas en la posicion de busqueda original*/
+                guardarficha(nueva,columnas,f,c,valor);/*se guardan las fichas de la posicion original en la nueva memoria */
+            } else if (f==indice){/*si el recorrido de las filas en la posicion f es igual a la posicion asignada  de la nueva fila entonces entre al condicional*/
+                guardarficha(nueva,columnas,f,c,rand()%6);/*asigne fichas a la nueva fila y guardelas en la memoria nueva*/
+            }else {int valor=leerfichas(memoria,columnas,f-1,c);/*se guarda la informacion de las filas viejas en la variable valor*/
+                guardarficha(nueva,columnas,f,c,valor);/*guardamos las fichas en la nueva memoria que ya tiene la nueva cantidad de bytes esto con la intencion de poder
+                asignar el valor correspondiente de memoria a cada uno de los casos sea un incremento para esta ocacion o un decremento en otras ocaciones */
 
             }
         }
 
     }
-    delete[] memoria;
-    filas= nuevas_filas;
-    return nueva;
+    delete[] memoria;/*liberamos la memoria vieja para evitar fugas de memoria*/
+    filas= nuevas_filas;/*asignamos la  nueva cantidad de filas que quedaron en la tabla*/
+    return nueva;/*retornamos el puntero nueva*/
 }
 
 unsigned char* eliminar_fila(unsigned char* memoria,int& filas,int columnas,int indice,int& eliminacionesusuario){
 
-    if (filas<=1) return memoria;
-    int nuevas_filas =filas-1;
-    int bytes = calcularbytesnecesarios(nuevas_filas,columnas);
-    unsigned char* nueva = new unsigned char[bytes]();
+    if (filas<=1) return memoria;/*si las filas son menores o iguales a uno no hay forma de eliminar filas por ende retorna memoria */
+    int nuevas_filas =filas-1; /*se calcula que como se va a eliminar una fila se reduce en uno y se guarda en la nueva variable nuevas_filas*/
+    int bytes = calcularbytesnecesarios(nuevas_filas,columnas);/*se calcula la cantidad de bytes que se requieren teniendo en cuenta la nueva cantidad de filas */
+    unsigned char* nueva = new unsigned char[bytes]();/*creamos un nuevo puntero para señalar en que lugar de la memoria va a quedar la nueva tabla de fichas con los cambios
+                                                        pertinentes*/
 
 
-    for (int f=0; f< filas;f++){
-        if (f==indice) continue;
-        int f_destino = (f<indice) ? f : f-1;
-        for (int c=0; c<columnas;c++){
-            int valor=leerfichas(memoria,columnas,f,c);
-            guardarficha(nueva,columnas,f_destino,c,valor);
+    for (int f=0; f< filas;f++){/*realizamos un recorrido por las filas empezando por la primera pocision*/
+        if (f!=indice){/*si la fila es diferente de la fila que queremos eliminar entramos al condicional */
+            int f_destino = (f<indice) ? f : f-1; /*se asigna al entero f_destino la fila que sea menor a la fila que queremos eliminar o si esta no cumple con ser menor
+                                            que la fila que queremos eliminar entonces le resta 1 desplazandolas filas hacia arriba cerrando los espacios que quedan
+                                            por las eliminaciones */
+            for (int c=0; c<columnas;c++){/*realizamos un recorrido por las columnas empezando por la primera posicion*/
+                int valor=leerfichas(memoria,columnas,f,c);/*el entero valor recibe la ficha despues de leerla en la memoria vieja*/
+                guardarficha(nueva,columnas,f_destino,c,valor);/*guardamos las fichas en la nueva memoria en la posicion que designamos despues de realizar la eliminacion
+                                                            de la fila respectiva en f_destino*/
 
+
+            }
 
         }
 
     }
-    delete[] memoria;
-    filas= nuevas_filas;
-    eliminacionesusuario=0;
-    return nueva;
+    delete[] memoria;/*liberamos la memoria vieja para evitar fugas de memoria */
+    filas= nuevas_filas;/*reasignamos el nuevo valor a las filas*/
+    eliminacionesusuario=0;/*reiniciamos la cantidad de eliminaciones*/
+    return nueva;/*retornamos la memoria  nueva*/
 }
 
 
 unsigned char* agregar_columna(unsigned char* memoria,int filas,int& columnas,int indice){
 
-    int nuevas_columnas= columnas+1;
-    int bytes = calcularbytesnecesarios(filas,nuevas_columnas);
-    unsigned char* nueva = new unsigned char[bytes]();
+    int nuevas_columnas= columnas+1;/*se incrementa en uno la cantidad de columnas a tener */
+    int bytes = calcularbytesnecesarios(filas,nuevas_columnas);/*calculamos cuantos bytes requiere de acuerdo ala nueva cantidad de columnas */
+    unsigned char* nueva = new unsigned char[bytes]();/*reasignamos la cantidad de memoria a un nuvo puntero siendo este llamado nueva */
 
 
-    for (int f=0; f<filas;f++){
-        for (int c=0; c<nuevas_columnas;c++){
-            if (c<indice){
-                int valor=leerfichas(memoria,columnas,f,c);
-                guardarficha(nueva,nuevas_columnas,f,c,valor);
-            } else if (c==indice){
-                guardarficha(nueva,nuevas_columnas,f,c,rand()%6);
-            }else {int valor=leerfichas(memoria,columnas,f,c-1);
-                guardarficha(nueva,nuevas_columnas,f,c,valor);
+    for (int f=0; f<filas;f++){/*realizamos un recorrido fila por fila hasta la posicion filas*/
+        for (int c=0; c<nuevas_columnas;c++){/*realizamos un recorrido columna por columna hasta haber revisado todas las nuevas_columnas de la fila determinada*/
+            if (c<indice){/*si el recorrido de las filas en la posicion c es menor a el indice o posicion asignada de la nueva columna entonces entre al condicional */
+                int valor=leerfichas(memoria,columnas,f,c);/*el entero valor va a guardar la informacion asignada a leerfichas en la posicion de busqueda original*/
+                guardarficha(nueva,nuevas_columnas,f,c,valor);/*guardamos las fichas en la memoria nueva con las columnas nuevas*/
+            } else if (c==indice){/*si las columnas en la posicion c son iguales a la posicion donde quiere ser agregada entre al condicional*/
+                guardarficha(nueva,nuevas_columnas,f,c,rand()%6);/*guardamos las fichas en la memoria nueva y generamos las fichas nuevas para esa columna nueva*/
+            }else {int valor=leerfichas(memoria,columnas,f,c-1);/*guardamos en el entero valor las fichas originales de la columna*/
+                guardarficha(nueva,nuevas_columnas,f,c,valor);/*guardamos las fichas en la nueva memoria que ya tiene la nueva cantidad de bytes esto con la intencion de poder
+                asignar el valor correspondiente de memoria a cada uno de los casos sea un incremento para esta ocacion o un decremento en otras ocaciones */
 
             }
         }
 
     }
-    delete[] memoria;
-    columnas= nuevas_columnas;
-    return nueva;
+    delete[] memoria;/*liberamos la memoria vieja para evitar fugas de memoria */
+    columnas= nuevas_columnas;/*reasignamos el nuevo valor a las columnas*/
+    return nueva;/*retornamos la memoria  nueva*/
 }
 
 
 
 unsigned char* eliminar_columna(unsigned char* memoria,int filas,int& columnas,int indice,int& eliminacionesusuario){
 
-    if (columnas<=1) return memoria;
-    int nuevas_columnas =columnas-1;
-    int bytes = calcularbytesnecesarios(filas,nuevas_columnas);
-    unsigned char* nueva = new unsigned char[bytes]();
+    if (columnas<=1) return memoria;/*si las columnas son menores o iguales a uno no hay forma de eliminar columnas por ende retorna memoria */
+    int nuevas_columnas =columnas-1;/*se calcula que como se va a eliminar una columna se reduce en uno y se guarda en la nueva variable nuevas_columnas*/
+    int bytes = calcularbytesnecesarios(filas,nuevas_columnas);/*se calcula la cantidad de bytes que se requieren teniendo en cuenta la nueva cantidad de columnas */
+    unsigned char* nueva = new unsigned char[bytes]();/*creamos un nuevo puntero para señalar en que lugar de la memoria va a quedar la nueva tabla de fichas con los cambios
+                                                        pertinentes*/
 
 
-    for (int f=0; f< filas;f++){
-        for (int c=0; c<columnas;c++){
-            if (c==indice) continue;
-            int c_destino = (c<indice) ? c : c-1;
-            int valor=leerfichas(memoria,columnas,f,c);
-            guardarficha(nueva,nuevas_columnas,f,c_destino,valor);
+    for (int f=0; f< filas;f++){/*realizamos un recorrido por las filas empezando por la primera pocision*/
+        for (int c=0; c<columnas;c++){/*realizamos un recorrido columna por columna hasta haber revisado todas las columnas de la fila determinada*/
+            if (c!=indice){/*si la columna es diferente de la columna que queremos eliminar entramos al condicional */
+                int c_destino = (c<indice) ? c : c-1;/*se asigna al entero c_destino la columna que sea menor a la columna que queremos eliminar o si esta no cumple con ser menor
+                                    que la columna que queremos eliminar entonces le resta 1, desplazando las columnas hacia la izquierda cerrando los espacios que quedan
+                                    por las eliminaciones */
+                int valor=leerfichas(memoria,columnas,f,c);/*el entero valor recibe la ficha despues de leerla en la memoria vieja*/
+                guardarficha(nueva,nuevas_columnas,f,c_destino,valor);/*guardamos las fichas en la nueva memoria en la posicion que designamos despues de realizar la eliminacion
+                                                            de la fila respectiva en c_destino*/
 
+
+            }
 
         }
 
     }
-    delete[] memoria;
-    columnas= nuevas_columnas;
-    eliminacionesusuario=0;
-    return nueva;
+    delete[] memoria;/*liberamos la memoria vieja para evitar fugas de memoria */
+    columnas= nuevas_columnas;/*reasignamos el nuevo valor a las columnas*/
+    eliminacionesusuario=0;/*reiniciamos la cantidad de eliminaciones*/
+    return nueva;/*retornamos la memoria  nueva*/
 }
